@@ -1,0 +1,315 @@
+Microsoft (R) Macro Assembler Version 5.00                  1/2/24 22:16:36
+                                                             Page     1-1
+
+
+       1				.386 
+       2 0000				rozkazy SEGMENT use16 
+       3						ASSUME	cs:rozkazy 
+       4				 
+       5				 
+       6 0000				rysuj_kwadrat PROC 
+       7 0000  50				push	ax 
+       8 0001  53				push	bx 
+       9 0002  06				push	es 
+      10 0003  51				push	cx 
+      11 0004  52				push	dx 
+      12 0005  2E: FF 36 00D3 R			push	cs:krawedz 
+      13				 
+      14 000A  B8 A000				mov		ax, 0A000H 
+      15 000D  8E C0				mov		es, ax 
+      16				 
+      17 000F  2E: A0 00BD R			mov		al, cs:kolor 
+      18 0013  2E: 8B 0E 00D3 R			mov		cx, cs:krawedz 
+      19 0018  2E: 8B 16 00D3 R			mov		dx, cs:krawedz 
+      20				 
+      21 001D  BB 0000				mov		bx, 0 
+      22 0020				kw:	 
+      23 0020  26: 88 07			mov		es:[bx], al ; w
+					pisanie kodu koloru do pamiêci ekranu 
+      24 0023  43				inc		bx 
+      25 0024  2E: 3B 1E 00D3 R			cmp		bx, cs:krawedz 
+      26 0029  75 F5				jne		kw 
+      27					 
+      28 002B  81 C3 0140			add		bx, 320 
+      29 002F  2B DA				sub		bx, dx 
+      30 0031  2E: 81 06 00D3 R 0140		add		cs:krawedz, 320
+					 
+      31					 
+      32 0038  49				dec		cx 
+      33 0039  83 F9 00				cmp		cx, 0 
+      34 003C  77 E2				ja		kw 
+      35				 
+      36				 
+      37 003E  2E: 8F 06 00D3 R			pop		cs:krawedz 
+      38 0043  5A				pop		dx 
+      39 0044  59				pop		cx 
+      40 0045  07				pop		es 
+      41 0046  5B				pop		bx 
+      42 0047  58				pop		ax 
+      43 0048  C3				ret 
+      44 0049				rysuj_kwadrat ENDP 
+      45				 
+      46 0049				obsluga_klawy PROC 
+      47 0049  50				push	ax 
+      48 004A  53				push	bx 
+      49 004B  06				push	es 
+      50				 
+      51 004C  E4 60				in		al, 60h 
+      52 004E  3C 13				cmp		al, 19 
+Microsoft (R) Macro Assembler Version 5.00                  1/2/24 22:16:36
+                                                             Page     1-2
+
+
+      53 0050  0F 85 0059 R			jne		nie_rowne 
+      54 0054  2E: FF 06 00BE R			inc		cs:licznik 
+      55 0059				nie_rowne: 
+      56 0059  07				pop		es 
+      57 005A  5B				pop		bx 
+      58 005B  58				pop		ax 
+      59				 
+      60 005C  2E: FF 2E 00C8 R			jmp		dword ptr cs:we
+					ktor9 
+      61 0061				obsluga_klawy ENDP 
+      62				 
+      63 0061				linia PROC 
+      64 0061  50				push	ax 
+      65 0062  53				push	bx 
+      66 0063  06				push	es 
+      67				 
+      68					 
+      69 0064  2E: 66| FF 0E 00CC R		dec dword ptr cs:czas_oczekiwan
+					ia  
+      70 006A  0F 85 00B5 R			jnz skip 
+      71 006E  2E: 66| C7 06 00CC R		mov	dword ptr cs:czas_oczek
+					iwania, 5 
+      72       00000005			
+      73				 
+      74 0078  2E: A0 00D0 R			mov		al, cs:kolor_cz
+					arny 
+      75 007C  2E: 38 06 00BD R			cmp		cs:kolor, al 
+      76 0081  0F 85 00A5 R			jne		na_czarny 
+      77 0085  2E: 83 3E 00BE R 24		cmp		cs:licznik, 36 
+      78 008B  0F 86 009A R			jbe		zolty 
+      79				 
+      80 008F  2E: A0 00D2 R			mov		al, cs:kolor_cz
+					erwony 
+      81 0093  2E: A2 00BD R			mov		cs:kolor, al 
+      82 0097  EB 14 90				jmp		rysuj 
+      83 009A				zolty: 
+      84 009A  2E: A0 00D1 R			mov		al, cs:kolor_zo
+					lty 
+      85 009E  2E: A2 00BD R			mov		cs:kolor, al 
+      86 00A2  EB 09 90				jmp		rysuj 
+      87 00A5				na_czarny: 
+      88 00A5  2E: A0 00D0 R			mov		al, cs:kolor_cz
+					arny 
+      89 00A9  2E: A2 00BD R			mov		cs:kolor, al 
+      90				 
+      91 00AD				rysuj: 
+      92				 
+      93 00AD  E8 0000 R			call	rysuj_kwadrat 
+      94				 
+      95				 
+      96					; zapisanie adresu bie¿¹cego pi
+					ksela 
+      97 00B0				dalej: 
+      98 00B0  2E: 89 1E 00C0 R			mov		cs:adres_piksel
+Microsoft (R) Macro Assembler Version 5.00                  1/2/24 22:16:36
+                                                             Page     1-3
+
+
+					a, bx 
+      99 00B5				skip: 
+     100 00B5  07				pop		es 
+     101 00B6  5B				pop		bx 
+     102 00B7  58				pop		ax 
+     103				 
+     104 00B8  2E: FF 2E 00C4 R			jmp		dword ptr cs:we
+					ktor8 
+     105				 
+     106					;zmienne 
+     107 00BD  01				kolor			db
+						1 
+     108 00BE  0000				licznik			dw
+						0 
+     109 00C0  000A				adres_piksela	dw	10 
+     110 00C2  0000				przyrost		dw
+						0 
+     111 00C4  ????????				wektor8			dd
+						? 
+     112 00C8  ????????				wektor9			dd
+						? 
+     113 00CC  05000000				czas_oczekiwania dd 5 
+     114 00D0  00				kolor_czarny	db	0 
+     115 00D1  0E				kolor_zolty		db
+						14 
+     116 00D2  0C				kolor_czerwony	db	12 
+     117 00D3  0032				krawedz			dw
+						50 
+     118 00D5				linia ENDP 
+     119				 
+     120 00D5				zacznij: 
+     121 00D5  B4 00				mov ah, 0 
+     122 00D7  B0 13				mov al, 13H		
+									; nr tr
+					ybu 
+     123 00D9  CD 10				int 10H 
+     124 00DB  BB 0000				mov bx, 0 
+     125 00DE  8E C3				mov es, bx		
+									; zerow
+					anie rejestru ES 
+     126 00E0  26: 66| A1 0020			mov eax, es:[32]	
+								; odczytanie we
+					ktora nr 8 
+     127 00E5  2E: 66| A3 00C4 R		mov cs:wektor8, eax	
+								; zapamiêtanie 
+					wektora nr 8 
+     128				 
+     129 00EA  26: 66| A1 0024			mov eax, es:[36]	
+								; odczytanie we
+					ktora nr 9 
+     130 00EF  2E: 66| A3 00C8 R		mov cs:wektor9, eax	
+								; zapamiêtanie 
+					wektora nr 9 
+     131				 
+Microsoft (R) Macro Assembler Version 5.00                  1/2/24 22:16:36
+                                                             Page     1-4
+
+
+     132					; adres procedury 'kwadrat' w p
+					ostaci segment:offset 
+     133 00F4  B8 ---- R			mov ax, SEG linia 
+     134 00F7  BB 0061 R			mov bx, OFFSET linia 
+     135				 
+     136 00FA  FA				cli			
+									
+						 
+     137 00FB  26: 89 1E 0020			mov es:[32], bx 
+     138 0100  26: A3 0022			mov es:[32+2], ax 
+     139 0104  FB				sti			
+									
+						 
+     140				 
+     141 0105  B8 ---- R			mov ax, SEG obsluga_klawy 
+     142 0108  BB 0049 R			mov bx, OFFSET obsluga_klawy 
+     143				 
+     144 010B  FA				cli 
+     145 010C  26: 89 1E 0024			mov es:[36], bx 
+     146 0111  26: A3 0026			mov es:[36+2], ax 
+     147 0115  FB				sti 
+     148				 
+     149				 
+     150 0116				aktywne_oczekiwanie: 
+     151 0116  B4 01				mov		ah, 1 
+     152 0118  CD 16				int		16H 
+     153 011A  74 FA				jz		aktywne_oczekiw
+					anie 
+     154				 
+     155 011C  B4 00				mov		ah, 0 
+     156 011E  CD 16				int		16H 
+     157 0120  3C 78				cmp		al, 'x'	
+									
+							 
+     158 0122  75 F2				jne aktywne_oczekiwanie	 
+     159				 
+     160 0124  B4 00				mov ah, 0		
+									; funkc
+					ja nr 0 ustawia tryb sterownika 
+     161 0126  B0 03				mov al, 3H		
+									; nr tr
+					ybu 
+     162 0128  CD 10				int 10H 
+     163				 
+     164					; odtworzenie oryginalnej zawar
+					toœci wektora nr 8 
+     165 012A  2E: 66| A1 00C4 R		mov eax, cs:wektor8 
+     166 012F  26: 66| A3 0020			mov es:[32], eax 
+     167				 
+     168					; odtworzenie oryginalnej zawar
+					toœci wektora nr 9 
+     169 0134  2E: 66| A1 00C8 R		mov eax, cs:wektor9 
+     170 0139  26: 66| A3 0024			mov es:[36], eax 
+     171				 
+Microsoft (R) Macro Assembler Version 5.00                  1/2/24 22:16:36
+                                                             Page     1-5
+
+
+     172					; zakoñczenie wykonywania progr
+					amu 
+     173 013E  B8 4C00				mov ax, 4C00H 
+     174 0141  CD 21				int 21H 
+     175 0143				rozkazy ENDS 
+     176				 
+     177 0000				stosik	SEGMENT stack 
+     178 0000  0100[				db	256	dup	(?) 
+     179	    ??			
+     180			 ]	
+     181				
+     182 0100				stosik	ENDS 
+     183				 
+     184				END zacznij 
+Microsoft (R) Macro Assembler Version 5.00                  1/2/24 22:16:36
+                                                             Symbols-1
+
+
+
+
+                N a m e         	Size	Length	 Align	Combine Class
+
+ROZKAZY  . . . . . . . . . . . .  	16 Bit	0143	PARA	NONE	
+STOSIK . . . . . . . . . . . . .  	32 Bit	0100	PARA	STACK	
+
+Symbols:            
+
+                N a m e         	Type	 Value	 Attr
+
+ADRES_PIKSELA  . . . . . . . . .  	L WORD	00C0	ROZKAZY
+AKTYWNE_OCZEKIWANIE  . . . . . .  	L NEAR	0116	ROZKAZY
+
+CZAS_OCZEKIWANIA . . . . . . . .  	L DWORD	00CC	ROZKAZY
+
+DALEJ  . . . . . . . . . . . . .  	L NEAR	00B0	ROZKAZY
+
+KOLOR  . . . . . . . . . . . . .  	L BYTE	00BD	ROZKAZY
+KOLOR_CZARNY . . . . . . . . . .  	L BYTE	00D0	ROZKAZY
+KOLOR_CZERWONY . . . . . . . . .  	L BYTE	00D2	ROZKAZY
+KOLOR_ZOLTY  . . . . . . . . . .  	L BYTE	00D1	ROZKAZY
+KRAWEDZ  . . . . . . . . . . . .  	L WORD	00D3	ROZKAZY
+KW . . . . . . . . . . . . . . .  	L NEAR	0020	ROZKAZY
+
+LICZNIK  . . . . . . . . . . . .  	L WORD	00BE	ROZKAZY
+LINIA  . . . . . . . . . . . . .  	N PROC	0061	ROZKAZY	Length = 0074
+
+NA_CZARNY  . . . . . . . . . . .  	L NEAR	00A5	ROZKAZY
+NIE_ROWNE  . . . . . . . . . . .  	L NEAR	0059	ROZKAZY
+
+OBSLUGA_KLAWY  . . . . . . . . .  	N PROC	0049	ROZKAZY	Length = 0018
+
+PRZYROST . . . . . . . . . . . .  	L WORD	00C2	ROZKAZY
+
+RYSUJ  . . . . . . . . . . . . .  	L NEAR	00AD	ROZKAZY
+RYSUJ_KWADRAT  . . . . . . . . .  	N PROC	0000	ROZKAZY	Length = 0049
+
+SKIP . . . . . . . . . . . . . .  	L NEAR	00B5	ROZKAZY
+
+WEKTOR8  . . . . . . . . . . . .  	L DWORD	00C4	ROZKAZY
+WEKTOR9  . . . . . . . . . . . .  	L DWORD	00C8	ROZKAZY
+
+ZACZNIJ  . . . . . . . . . . . .  	L NEAR	00D5	ROZKAZY
+ZOLTY  . . . . . . . . . . . . .  	L NEAR	009A	ROZKAZY
+
+@FILENAME  . . . . . . . . . . .  	TEXT  kwadrat		
+
+Microsoft (R) Macro Assembler Version 5.00                  1/2/24 22:16:36
+                                                             Symbols-2
+
+
+
+    180 Source  Lines
+    180 Total   Lines
+     27 Symbols
+
+  50466 + 466078 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

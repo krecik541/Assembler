@@ -1,0 +1,7 @@
+﻿  Assembling podaj_m.asm...
+podaj_m.asm(1): error A2008: syntax error : .
+podaj_m.asm(2): error A2008: syntax error : .
+podaj_m.asm(4): error A2008: syntax error : in directive
+podaj_m.asm(8): error A2070: invalid instruction operands
+podaj_m.asm(13): error A2070: invalid instruction operands
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\BuildCustomizations\masm.targets(70,5): error MSB3721: Polecenie ml64.exe /c /nologo /Zi /Fo"x64\Debug\podaj_m.obj" /W3 /errorReport:prompt  /Tapodaj_m.asm zostało zakończone; kod błędu: 1.
