@@ -1,0 +1,13 @@
+﻿  Assembling wykrywanie_sekwencji.asm...
+wykrywanie_sekwencji.asm(1): error A2008: syntax error : .
+wykrywanie_sekwencji.asm(2): error A2008: syntax error : .
+wykrywanie_sekwencji.asm(23): error A2070: invalid instruction operands
+wykrywanie_sekwencji.asm(24): error A2070: invalid instruction operands
+wykrywanie_sekwencji.asm(31): error A2070: invalid instruction operands
+wykrywanie_sekwencji.asm(39): error A2070: invalid instruction operands
+wykrywanie_sekwencji.asm(71): error A2070: invalid instruction operands
+wykrywanie_sekwencji.asm(72): error A2070: invalid instruction operands
+wykrywanie_sekwencji.asm(52): error A2229: cannot use labels and 32-bit addressing in the same expression
+wykrywanie_sekwencji.asm(55): error A2229: cannot use labels and 32-bit addressing in the same expression
+wykrywanie_sekwencji.asm(56): error A2229: cannot use labels and 32-bit addressing in the same expression
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\BuildCustomizations\masm.targets(70,5): error MSB3721: Polecenie ml64.exe /c /nologo /Zi /Fo"x64\Debug\wykrywanie_sekwencji.obj" /W3 /errorReport:prompt  /Tawykrywanie_sekwencji.asm zostało zakończone; kod błędu: 1.
